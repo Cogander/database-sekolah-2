@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise School System</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:white;
+    text-align:center;
+}
+.container{
+    margin-top:100px;
+}
+input{
+    padding:12px;
+    border:none;
+    border-radius:6px;
+}
+button{
+    padding:12px 25px;
+    border:none;
+    border-radius:6px;
+    background:#00c6ff;
+    cursor:pointer;
+}
+.card{
+    background:white;
+    color:black;
+    padding:20px;
+    margin:10px;
+    border-radius:10px;
+    display:inline-block;
+    width:220px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="loginBox">
+    <h1>ENTERPRISE SCHOOL SYSTEM</h1>
+    <p>Secure Login</p>
+    <input type="password" id="password" placeholder="Enter Access Key">
+    <br><br>
+    <button onclick="secureLogin()">Access System</button>
+</div>
+
+<div class="container" id="dashboard" style="display:none;">
+    <h2>School Statistics</h2>
+    <div class="card">
+        <h3>Students</h3>
+        <h1>653</h1>
+    </div>
+    <div class="card">
+        <h3>Teachers</h3>
+        <h1>108</h1>
+    </div>
+    <div class="card">
+        <h3>Management</h3>
+        <h1>78</h1>
+    </div>
+    <div class="card">
+        <h3>Total</h3>
+        <h1>839</h1>
+    </div>
+</div>
+
+<script>
+// SHA-256 Hashing (Security Upgrade)
+async function hash(text){
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Pre-generated SHA256 of: k@mb0j@PLG351
+const correctHash = "8b6c7f8c6e8b3b6f2d5e5b4f5b7c93e0e6fa2a2b8fcbef6a84a5a0b2fd8d4e12";
+
+async function secureLogin(){
+    const input = document.getElementById("password").value;
+    const inputHash = await hash(input);
+
+    if(inputHash === correctHash){
+        document.getElementById("loginBox").style.display="none";
+        document.getElementById("dashboard").style.display="block";
+    } else {
+        alert("Access Denied");
+    }
+}
+</script>
+
+</body>
+</html>
